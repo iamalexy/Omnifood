@@ -1,0 +1,77 @@
+<li class="left w25 relative pad0 padBottom10 oVisible">
+    <ul class="clear oVisible left w100 pad0 margin0 relative">
+        <li class="clear left w100 relative pad0 padBottom10 oVisible">
+            <ul class="clear oVisible left w95 pad0 margin0 relative">
+                <li class="left relative oVisible darkGray w100">
+                    <div class="clear darkGray left w95"><span class="fa fa-pencil green fontBig relative"></span><span class="padLeft5 purple fontBig bold">CAPITALIZATION</span></div>
+                </li>
+            </ul>
+        </li>
+        <li class="clear left w100 relative pad0 padBottom10 oVisible">
+            <ul class="clear oVisible left w100 pad0 margin0 relative">
+
+                <li class="clear left w100 relative pad0 padBottom10 oHidden textOEllipsis">
+                    <ul class="clear oVisible left w90 pad0 margin0 border borderRadius5 pad10 relative skyLightBlueBg">
+                        <li class="left relative oVisible darkGray">
+                            <a href="#allocations?action=create" class="relative navyBlue hoverLinkBlue navLinks"><span class="brightBlue fa fa-line-chart fontSmall"></span><span class="padLeft10">Incomplete Capitalization Answers</span></a>
+                        </li>
+                        <li class="clear left w100 relative padBottom10 oVisible">
+                            <ul class="clear left relative oVisible grayBg gray fontSmall pad5 borderRadius5 border w97">
+                                <li class="clear left relative oVisible">Strategy/DQLs/Tech Leads to complete missing answers to the capitalization section within each Product</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="clear left w100 relative pad0 padBottom10 oHidden textOEllipsis ">
+                    <ul class="clear oVisible left w90 pad0 margin0 border borderRadius5 pad10 relative skyLightBlueBg">
+                        <li class="left relative oVisible darkGray">
+                            <a href="#suballocations?action=create" class="relative navyBlue hoverLinkBlue navLinks"><span class="brightBlue fa fa-hourglass fontSmall"></span><span class="padLeft10">Capitalize (Finance Only)</span></a>
+                        </li>
+                        <li class="clear left w100 relative padBottom10 oVisible">
+                            <ul class="clear left relative oVisible grayBg gray fontSmall pad5 borderRadius5 border w97">
+                                <li class="clear left relative oVisible">Finance review of capitalization answers and linking to SAP</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+
+            </ul>
+        </li>
+    </ul>
+</li>
+
+
+
+https://teamrosters.walmart.com/app/#/search?
+organizations=43
+&organizations=37
+&organizations=3
+&organizations=25
+&organizations=41
+&organizations=21
+&organizations=20
+&organizations=9
+&organizations=36
+&organizations=33
+&organizations=32
+&organizations=28
+&organizations=13
+&organizations=12
+&organizations=2
+&organizations=1
+
+
+&pillars=11600
+
+&teams=93-tfs
+
+&confirmStatus=confirmed
+
+&employments=fullTime
+&employments=partTime
+&employments=consultant
+&employments=contractor
+&employments=temporary
+
+

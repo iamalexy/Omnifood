@@ -1,0 +1,175 @@
+bindFormFieldOnChangePillarsListMenu: function(){
+    var that = ( !isUndefined( roadmapForm) )?roadmapForm: this;
+
+	//alert('Ok - PillarsListMenu');
+
+	$('#pillarsListMenu').on( 'change', function(e){
+
+		var $pillarsListMenuId = $('#pillarsListMenu').val();
+
+		//alert('$pillarsListMenuId : ' + $pillarsListMenuId);
+
+       //var $url = 'https://roadmap-dev.homeoffice.wal-mart.com/apis/default/api.php?method=getProductsCapitalizationsData';
+    //    var $url = 'https://roadmap-dev.homeoffice.wal-mart.com/apis/io/api.php?process=productscapitalization&method=getCapitalizationsListData&PC_ID=11300&organizationID=US-CTO';
+   //https://roadmap-dev.homeoffice.wal-mart.com/apis/io/api.php?process=productscapitalization&method=getCapitalizationsListData&PC_ID=11300
+      
+    var $trunkPathArr = [];
+    $trunkPathArr.push( 'productscapitalization' );
+    var $method = 'getCapitalizationsListData';
+    var $url =  that.$roadmapIO.getApiPath( $method, $trunkPathArr );
+	   
+	   
+	    var $paramsArr = [];
+        $paramsArr.push( 'PC_ID=' +  $pillarsListMenuId );
+        
+        var $params = ( !isUndefined($paramsArr) && $paramsArr )?'&' + $paramsArr.join('&'):'';
+    
+        //go api to fetch data
+        var $url = $url + $params;
+        // var $url =$url;
+    //    alert('$url : ' + $url);
+    
+        var $async = false;
+        var $callFunc = '';
+        that.$productsCapitalizationsData = that.loadDataRequestUrl( $url, $async, $callFunc ); //call api to get info
+
+		//console.log(JSON.stringify($productsCapitalizationsData));
+		//alert(JSON.stringify(that.$productsCapitalizationsData));
+
+    that.$productsCapitalizationsData = ( !isUndefined( that.$productsCapitalizationsData ) && that.$productsCapitalizationsData && ( isArray(that.$productsCapitalizationsData) || isObject(that.$productsCapitalizationsData) ) && getCountLength(that.$productsCapitalizationsData) > 0 )?that.$productsCapitalizationsData:null;
+
+
+	var $prod_cap_data = {}; // products_capitalizations_list
+	
+	//$productsCapitalizationsData:[],
+	//$productsCapitalizationsData_all = [];
+	//$productsCapitalizationsData_incomplete = [];
+	//$productsCapitalizationsData_complete = [];
+	
+		//alert("that.$productsCapitalizationsData : " + JSON.stringify(that.$productsCapitalizationsData));
+	
+	  for( var i in that.$productsCapitalizationsData ){
+        var $info = that.$productsCapitalizationsData[i];
+		
+		//alert('For ');
+
+		//alert("$info : " + JSON.stringify($info));
+	
+        var $product_issue_id = ( !isUndefined( $info['ProductIssueID'] ) && $info['ProductIssueID'] )?$info['ProductIssueID']:null;
+        var $pc_id = ( !isUndefined( $info['PC_ID'] ) && $info['PC_ID'] )?$info['PC_ID']:null;
+        //var $id = ( !isUndefined( $info['ID'] ) && $info['ID'] )?$info['ID']:null;
+        var $prod_name = ( !isUndefined( $info['productName'] ) && $info['productName'] )?$info['productName']:null;
+        var $product_status_color = ( !isUndefined( $info['productJiraStatusColor'] ) && $info['productJiraStatusColor'] )?$info['productJiraStatusColor']:null;
+        var $capitalizable = ( !isUndefined( $info['Capitalizable'] ) && $info['Capitalizable'] )?$info['Capitalizable']:null;
+
+        if( !$product_issue_id || !$pc_id || !$prod_name ) continue;
+		
+		//alert("$prod_name : " + $prod_name);
+		if(typeof $prod_cap_data[$prod_name] != 'object')
+	    {
+            $prod_cap_data[$prod_name] = {};            
+		}
+		
+		//alert("$prod_cap_data[$prod_name] : " + JSON.stringify($prod_cap_data));
+        $prod_cap_data[$prod_name]['product_issue_id'] = $product_issue_id;
+        $prod_cap_data[$prod_name]['pc_id'] = $pc_id;
+        //$prod_cap_data[$prod_name]['id'] = $id;
+        $prod_cap_data[$prod_name]['name'] = $prod_name;
+        $prod_cap_data[$prod_name]['capitalizable'] = $capitalizable; 
+        $prod_cap_data[$prod_name]['status'] = ''; //1,0,null,0
+        $prod_cap_data[$prod_name]['product_status_color'] = $product_status_color; //1,0,null,0
+		//$capitalizable = //1,0,null,0,1
+
+		if($prod_cap_data[$prod_name]['capitalizable'] === null || $prod_cap_data[$prod_name]['capitalizable'] === '')
+	    {
+			$prod_cap_data[$prod_name]['status'] = 'Incomplete';
+	    }
+		else if($prod_cap_data[$prod_name]['status'] != 'Incomplete')
+	    {
+			$prod_cap_data[$prod_name]['status'] = 'Completed';
+	    }
+
+    }
+
+    //Empty Data
+	that.$productsCapitalizationsData_all = [];
+	that.$productsCapitalizationsData_complete = [];
+	that.$productsCapitalizationsData_incomplete = [];
+    
+	$.each( $prod_cap_data, function( key, dat ) {
+        
+              console.log(key + ": " + JSON.stringify(dat));
+            //   alert( key + ": " + JSON.stringify(dat) );
+              //Enterprise Tools: {"product_issue_id":"814524","pc_id":"11300","name":"Enterprise Tools","capitalizable":"0","status":"Completed"}
+        
+              var $arr = [];
+              $arr['product_issue_id'] = dat.product_issue_id;
+              $arr['pc_id'] = dat.pc_id;
+              $arr['name'] = dat.name;
+              //$arr['capitalizable'] = dat.capitalizable; 
+              $arr['status'] = dat.status; 
+              
+              $arr['statusColor'] = '';
+              if(lowercase(dat.product_status_color) == 'green' )
+                  $arr['statusColor'] = 'statusGreenBg';
+              else if(lowercase(dat.product_status_color) == 'yellow' )
+                  $arr['statusColor'] = 'statusYellowBg';
+              else if(lowercase(dat.product_status_color) == 'red' )
+                  $arr['statusColor'] = 'statusRedBg';
+              else if(lowercase(dat.product_status_color) == 'None' || lowercase(dat.product_status_color) == '')
+                  $arr['statusColor'] = 'statusNoneBg';
+
+      
+              that.$productsCapitalizationsData_all.push( $arr );
+      
+              if(dat.status == 'Completed')
+                  that.$productsCapitalizationsData_complete.push( $arr );
+              if(dat.status == 'Incomplete')
+                  that.$productsCapitalizationsData_incomplete.push( $arr );
+      
+          });
+      
+          //alert(that.$productsCapitalizationsData_all.length); //alert message
+          
+          if(that.$productsCapitalizationsData_all.length > 0)
+              console.log("All => Application Name : " + that.$productsCapitalizationsData_all[0]['name'] + " :: Status : " + that.$productsCapitalizationsData_all[0]['status'] + " :: Status Color: " + that.$productsCapitalizationsData_all[0]['statusColor']);
+        
+            if(that.$productsCapitalizationsData_complete.length > 0)
+                console.log("Completed => Application Name : " + that.$productsCapitalizationsData_complete[0]['name'] + " :: Status : " + that.$productsCapitalizationsData_complete[0]['status']);
+        
+            if(that.$productsCapitalizationsData_incomplete.length > 0)
+                console.log("Incomplete => Application Name : " + that.$productsCapitalizationsData_incomplete[0]['name'] + " :: Status : " + that.$productsCapitalizationsData_incomplete[0]['status']);    
+            
+            that.showProductsCapitalizationsList('products_capitalizations_list', that.$productsCapitalizationsData_all);                
+	});
+},
+
+bindFormFieldOnChangeProductStatusMenu:function(){
+    var that = ( !isUndefined( roadmapForm) )?roadmapForm: this;
+    
+    	//alert('Ok - productStatusMenu');
+
+$('#productStatusMenu').on( 'change', function(e){
+         var $productStatusMenuId = $('#productStatusMenu').val();
+         //alert('$pillarsListMenuId : ' + $pillarsListMenuId);
+         
+         var $trunkPathArr = [];
+         
+         $trunkPathArr.push( 'productscapitalization' );
+         var $method = 'getCapitalizationsListData';
+         var $url =  that.$roadmapIO.getApiPath( $method, $trunkPathArr );
+         
+         var $paramsArr = [];
+         $paramsArr.push( 'PC_ID=' +  $pillarsListMenuId );
+         var $params = ( !isUndefined($paramsArr) && $paramsArr )?'&' + $paramsArr.join('&'):'';
+         
+         var $url = $url + $params;
+         var $async = false;
+         var $callFunc = '';
+         that.$productsCapitalizationsData = that.loadDataRequestUrl( $url, $async, $callFunc ); //call api to get info
+         
+         that.$productsCapitalizationsData = ( !isUndefined( that.$productsCapitalizationsData ) && that.$productsCapitalizationsData && ( isArray(that.$productsCapitalizationsData) || isObject(that.$productsCapitalizationsData) ) && getCountLength(that.$productsCapitalizationsData) > 0 )?that.$productsCapitalizationsData:null;
+         
+         var $prod_cap_data = {}; // products_capitalizations_list
+    });
+}
